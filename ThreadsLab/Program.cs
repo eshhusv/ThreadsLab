@@ -2,15 +2,17 @@
 
 internal class Program
 {
-    static void SecondThread(int num1, int num2, int num3)
+    static void SecondThread(int[] numsArr)
     {
         Thread.CurrentThread.Name = "SecondThread";
         Console.WriteLine(Thread.CurrentThread.Name + " has started working");
         Stopwatch sw = Stopwatch.StartNew();
         sw.Start();
-        int[] nums = { num1, num2, num3 };
+        int num1 = numsArr[0];
+        int num2 = numsArr[1];
+        int num3 = numsArr[2];
         int min = num1;
-        foreach (int num in nums)
+        foreach (int num in numsArr)
         {
             if (min > num) min = num;
         }
@@ -40,10 +42,11 @@ internal class Program
         int num2 = int.Parse(Console.ReadLine());
         Console.Write("Type third number: ");
         int num3 = int.Parse(Console.ReadLine());
-        ThreadStart secondThread = new ThreadStart(SecondThread(num1, num2, num3));
-        Thread thread = new Thread(secondThread);
+        int[] numsArr = {num1, num2, num3};
+        ParameterizedThreadStart secondThread = new ParameterizedThreadStart(SecondThread);
+        Thread thread = new Thread(secondThread);   
         Thread.CurrentThread.Name = "MainThread";
-        thread.Start();
+        thread.Start(numsArr);
 
         Stopwatch sw = Stopwatch.StartNew();
         sw.Start();
